@@ -1,0 +1,25 @@
+{
+  "name": "quiz_1",
+  "version": "0.0.1",
+  "description": "Cluckr",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon",
+    "db:create": "createdb --echo clucks_dev",
+    "db:drop": "dropdb --echo --if-exists clucks_dev"
+  },
+  "author": "Gloria Ding",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "knex": "^0.14.2",
+    "morgan": "^1.9.0",
+    "pg": "^7.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.4"
+  }
+}
