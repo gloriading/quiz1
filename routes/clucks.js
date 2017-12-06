@@ -20,14 +20,19 @@ router.post('/', upload.single('picture') , (request, response) => {
   // const image_url = request.body.image_url;
   const content = request.body.content;
   const filename = request.file.filename;
+
   const image_url = path.join(UPLOADS_DIR, filename);
 
-    knex
-      .insert({username, image_url, content})
-      .into('clucks') //table name
-      .returning('id')
-      .then(result => response.redirect(`/clucks/${result}`)) // result is the returning id
-      .catch(error => response.send(error));
+  if(username){
+      knex
+        .insert({username, image_url, content})
+        .into('clucks') //table name
+        .returning('id')
+        .then(result => response.redirect(`/clucks/${result}`)) // result is the returning id
+        .catch(error => response.send(error));
+  }else{
+    response.render('clucks/new');
+  }
 
 });
 
@@ -107,7 +112,34 @@ router.get('/', (request, response) => {
       };
       const aDay = 24 * 60 * 60 * 1000;
 
-      response.render('clucks/allClucks', {lists, time_ago});
+      // Trending Tags ------------------------------------------------
+
+
+      let frequency={};
+      function trend(str){
+        let hashArr=[];
+        const arr = str.replace(/(\r\n|\n|\r)/gm," ").split(" ");
+        // replace new line with blanks before split
+        for(let element of arr){
+          if(element[0] === "#"){
+            hashArr.push(element.toLowerCase());
+          }
+        }
+        for(let element of hashArr){
+          if(frequency[element]){
+            frequency[element] += 1;
+          }else{
+            frequency[element] = 1;
+          }
+        }
+        return frequency;
+      }
+
+      for(let list of lists){
+          trend(list.content);
+      }
+      console.log(frequency);
+      response.render('clucks/allClucks', {lists, time_ago, frequency});
     });
 
 })
