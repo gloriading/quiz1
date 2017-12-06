@@ -19,9 +19,13 @@ router.post('/', upload.single('picture') , (request, response) => {
   const username = request.body.username;
   // const image_url = request.body.image_url;
   const content = request.body.content;
-  const filename = request.file.filename;
+  const imageEntry = request.body.picture;// upload input
 
-  const image_url = path.join(UPLOADS_DIR, filename);
+  let image_url= "";
+  if(require.file){
+    const filename = request.file.filename;
+    image_url = path.join(UPLOADS_DIR, filename);
+  }
 
   if(username){
       knex
